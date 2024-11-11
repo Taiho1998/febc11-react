@@ -17,7 +17,7 @@
           <header>
             <h1>Todo List - React로 UI 구성 :)</h1>
             <p>
-              파일 경로:{" "}
+              파일 경로:
               <span id="filepath">
                 `ch${document.URL.split("/ch")[1]}index.html`
               </span>
@@ -26,11 +26,36 @@
         );
       }
 
-      function TodoInput() {
+      function TodoInput({ addItem }) {
+        const [title, setTitle] = React.useState("");
+        const [nextId, setNextId] = React.useState(4);
+
+        const handleAdd = () => {
+          if (title.trim() !== "") {
+            const item = { _id: nextId, title, done: false };
+            addItem(item);
+
+            setNextId(nextId + 1);
+            setTitle("");
+          }
+        };
+
+        const handleKeyUp = (event) => {
+          if (event.key === "Enter") handleAdd();
+        };
+
         return (
           <div className="todoinput">
-            <input type="text" autoFocus />
-            <button type="button">추가</button>
+            <input
+              type="text"
+              autoFocus
+              onKeyUp={handleKeyUp}
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+            <button type="button" onClick={handleAdd}>
+              추가
+            </button>
           </div>
         );
       }
@@ -59,7 +84,7 @@
               <ul>
                 <li>
                   <h2>쇼핑 목록</h2>
-                  <TodoInput />
+                  <TodoInput addItem={props.addItem} />
                   <TodoList itemList={props.itemList} />
                 </li>
               </ul>
@@ -77,16 +102,21 @@
       }
 
       function App() {
-        const itemList1 = [
+        const [itemList, setItemList] = React.useState([
           { _id: 1, title: "두부", done: true },
           { _id: 2, title: "계란", done: false },
           { _id: 3, title: "라면", done: true },
-        ];
+        ]);
+
+        const addItem = (item) => {
+          const newItemList = [...itemList, item];
+          setItemList(newItemList);
+        };
 
         return (
           <div id="todo">
             <Header />
-            <Todo itemList={itemList1} />
+            <Todo itemList={itemList} addItem={addItem} />
             <Footer />
           </div>
         );
