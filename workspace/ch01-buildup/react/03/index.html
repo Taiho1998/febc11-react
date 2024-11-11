@@ -35,10 +35,26 @@
         );
       }
 
-      function TodoItem() {}
+      function TodoItem() {
+        return (
+          <li>
+            <span>1</span>
+            <span>
+              <s>샘플1</s>
+            </span>
+            <button type="button">삭제</button>
+          </li>
+        );
+      }
 
-      function todolist() {
-        return;
+      function TodoList() {
+        return (
+          <ul className="todolist">
+            <TodoItem />
+            <TodoItem />
+            <TodoItem />
+          </ul>
+        );
       }
 
       function Todo() {
@@ -48,26 +64,8 @@
               <ul>
                 <li>
                   <h2>쇼핑 목록</h2>
-
-                  <ul className="todolist">
-                    <li>
-                      <span>1</span>
-                      <span>
-                        <s>샘플1</s>
-                      </span>
-                      <button type="button">삭제</button>
-                    </li>
-                    <li>
-                      <span>2</span>
-                      <span>샘플2</span>
-                      <button type="button">삭제</button>
-                    </li>
-                    <li>
-                      <span>3</span>
-                      <span>샘플3</span>
-                      <button type="button">삭제</button>
-                    </li>
-                  </ul>
+                  <TodoInput />
+                  <TodoList />
                 </li>
               </ul>
             </div>
@@ -90,7 +88,13 @@
           { _id: 3, title: "라면", done: true },
         ];
 
-        return <div id="todo"></div>;
+        return (
+          <div id="todo">
+            <Header />
+            <Todo />
+            <Footer />
+          </div>
+        );
       }
 
       ReactDOM.createRoot(document.getElementById("root")).render(<App />);
