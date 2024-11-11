@@ -1,4 +1,4 @@
-import TodoItem from "./TodoItem";
+import TodoItem from "./TodoItem.jsx";
 
 function TodoList({ itemList }) {
   const list = itemList.map((item) => <TodoItem key={item._id} item={item} />);

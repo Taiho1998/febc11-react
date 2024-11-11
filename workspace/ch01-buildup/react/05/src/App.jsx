@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Todo from "./pages/Todo";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Todo from "./pages/Todo.jsx";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   return function App() {
@@ -16,10 +16,26 @@ function App() {
       setItemList(newItemList);
     };
 
+    const toggleDone = (_id) => {
+      const item = itemList.find((item) => item._id === _id);
+      item.done = !item.done;
+      setItemList([...itemList]);
+    };
+
+    const deleteItem = (_id) => {
+      const newItemList = itemList.filter((item) => item._id !== _id);
+      setItemList(newItemList);
+    };
+
     return (
       <div id="todo">
         <Header />
-        <Todo itemList={itemList} addItem={addItem} />
+        <Todo
+          itemList={itemList}
+          addItem={addItem}
+          toggleDone={toggleDone}
+          deleteItem={deleteItem}
+        />
         <Footer />
       </div>
     );
