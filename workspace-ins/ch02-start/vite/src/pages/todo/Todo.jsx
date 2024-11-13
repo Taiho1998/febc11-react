@@ -1,4 +1,5 @@
-import Title from '../../components/Title';
+import Title from "@components/Title";
+
 function Todo(){
   return (
     <div>
