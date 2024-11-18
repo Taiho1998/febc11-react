@@ -28,13 +28,8 @@ var arr2 = arr.map(function(item){
 
 // Arrow function, ES6
 var arr2 = [];
-arr.forEach((item) => {
-  arr2.push(item * item);
-});
+arr.forEach(item => arr2.push(item * item));
 
-var arr2 = arr.map((item) => {
-  return (item * item);
-});
-
+var arr2 = arr.map(item => item * item);
 
 console.log(arr2);  // [100, 400, 900]
