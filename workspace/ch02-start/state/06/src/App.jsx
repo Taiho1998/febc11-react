@@ -16,6 +16,9 @@ function App() {
     watch,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    criteriaMode: "firstError",
     defaultValues: {
       name: "",
       email: "",
@@ -42,6 +45,10 @@ function App() {
               value: 2,
               message: "2글자 이상 입력하세요.",
             },
+            pattern: {
+              value: /^[^\d]*$/,
+              message: "숫자는 입력할 수 없습니다",
+            },
           })}
         />
         <br />
@@ -52,7 +59,7 @@ function App() {
           id="email"
           {...register("email", {
             required: "이메일을 입력하세요.",
-            minLength: {
+            pattern: {
               value: emailExp,
               message: "이메일 양식에 맞지 않습니다.",
             },
@@ -66,7 +73,7 @@ function App() {
           id="cellphone"
           {...register("cellphone", {
             required: "전화번호를 입력하세요.",
-            minLength: {
+            pattern: {
               value: cellphoneExp,
               message: "전화번호 양식에 맞지 않습니다.",
             },
