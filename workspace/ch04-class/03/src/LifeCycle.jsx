@@ -14,6 +14,9 @@ class ClickMe extends Component {
   static getDerivedStateFromProps(props, state) {
     console.log("1 - 2 / 2 - 1 getDerivedStateFromProps 호출됨");
 
+    if (state.count > props.level * 5) {
+      return { count: 0 };
+    }
     return null;
   }
 
