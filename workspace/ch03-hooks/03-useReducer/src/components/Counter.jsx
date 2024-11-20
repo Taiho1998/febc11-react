@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Button from "./Button";
 import PropTypes from "prop-types";
 
@@ -8,46 +8,27 @@ Counter.propTypes = {
 
 function Counter({ children = "0" }) {
   const initCount = Number(children);
-
   const [step, setStep] = useState(1);
 
-  const [count, setCount] = useState(initCount);
+  const [count, countDispatch] = useReducer(counterReducer, initCount);
 
   const handleDown = () => {
-    setCount(count - step);
+    countDispatch({ type: "DOWN", step });
   };
   const handleUp = () => {
-    setCount(count + step);
+    countDispatch({ type: "UP", step });
   };
   const handleReset = (event) => {
-    setCount(initCount);
+    countDispatch({ type: "RESET", step });
   };
 
-  // 1초 후에 자동으로 값 한 번 증가
-  // "무량공처"
-  // setTimeout(() => {
-  //   handleUp();
-  // }, 1000);
-
-  // 마운트 된 후에 최초 한 번만 값 증가
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     handleUp();
-  //   }, 1000);
-  // }, [step]);
-
-  // useEffect(() => {
-  //   console.log("setup 함수 호출");
-  //   setInterval(() => {
-  //     console.log(new Date());
-  //   }, 1000);
-  // }, [step]);
-
   useEffect(() => {
+    console.log("setup 함수 호출");
     const timer = setInterval(() => {
       console.log(step, new Date());
     }, 1000);
     return () => {
+      console.log(step, "cleanup 함수 호출");
       clearInterval(timer);
     };
   }, [step]);
@@ -76,6 +57,23 @@ function Counter({ children = "0" }) {
   );
 }
 
-function counterReducer(state, action) {}
+function counterReducer(state, action) {
+  //{5, { type: 'DOWN', value: 3 }}
+  let newState;
+
+  switch (action.type) {
+    case "DOWN":
+      newState = state - action.value;
+      break;
+    case "UP":
+      newState = state + action.value;
+      break;
+    case "RESET":
+      newState = action.value;
+      break;
+    default:
+      newState = state;
+  }
+}
 
 export default Counter;
