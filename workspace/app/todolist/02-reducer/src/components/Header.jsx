@@ -1,7 +1,7 @@
 function Header() {
   return (
     <header>
-      <h1>Todo List - 기능 추가</h1>
+      <h1>Todo List - useReduce로 상태 관리</h1>
     </header>
   );
 }

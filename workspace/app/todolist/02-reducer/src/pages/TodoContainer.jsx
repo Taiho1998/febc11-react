@@ -1,32 +1,34 @@
 import Todo from "@pages/Todo";
-import { produce } from "immer";
-import { useState } from "react";
+import TodoReducer from "@pages/TodoReducer";
+import { useReducer, useRef, useState } from "react";
 
 function TodoContainer() {
   const sampleItemList = [
     { _id: 1, title: "두부", done: true },
     { _id: 2, title: "계란", done: false },
     { _id: 3, title: "라면", done: true },
+    { _id: 4, title: "김치", done: true },
   ];
-  const [itemList, setItemList] = useState(sampleItemList);
+  // const [nextId, setNextId] = useState(sampleItemList.length + 1);
+  const nextId = useRef(sampleItemList.length + 1);
 
-  const addItem = (item) => {
-    const newItemList = [...itemList, item];
-    setItemList(newItemList);
+  const [itemList, itemListDispatch] = useReducer(TodoReducer, sampleItemList);
+
+  const addItem = (title) => {
+    itemListDispatch({
+      type: "ADD",
+      value: { _id: nextId.current, title, done: false },
+    });
+    // setNextId(nextId + 1);
+    nextId.current += 1;
   };
 
   const toggleDone = (_id) => {
-    const newItemList = produce(itemList, (draft) => {
-      const item = draft.find((item) => item._id === _id);
-      item.done = !item.done;
-    });
-
-    setItemList(newItemList);
+    itemListDispatch({ type: "TOGGLE", value: { _id } });
   };
 
   const deleteItem = (_id) => {
-    const newItemList = itemList.filter((item) => item._id !== _id);
-    setItemList(newItemList);
+    itemListDispatch({ type: "DELETE", value: { _id } });
   };
 
   return (

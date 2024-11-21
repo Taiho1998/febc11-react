@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function TodoInput({ addItem }) {
   const [title, setTitle] = useState("");
-  const [nextId, setNextId] = useState(4);
+
+  const titleElem = useRef(null);
 
   const handleAdd = () => {
     if (title.trim() !== "") {
-      const item = { _id: nextId, title, done: false };
-      addItem(item);
+      addItem(title);
 
-      setNextId(nextId + 1);
       setTitle("");
+      titleElem.current.focus();
     }
   };
 
@@ -25,6 +25,7 @@ function TodoInput({ addItem }) {
         autoFocus
         onKeyUp={handleKeyUp}
         value={title}
+        ref={titleElem}
         onChange={(event) => setTitle(event.target.value)}
       />
       <button type="button" onClick={handleAdd}>

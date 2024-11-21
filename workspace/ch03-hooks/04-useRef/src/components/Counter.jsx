@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Button from "./Button";
 import PropTypes from "prop-types";
 
@@ -8,30 +8,34 @@ Counter.propTypes = {
 
 function Counter({ children = "0" }) {
   const initCount = Number(children);
-  const [step, setStep] = useState(1);
+  // const [step, setStep] = useState(1);
+  const step = useRef(1);
+  const stepElem = useRef(null);
 
   const [count, countDispatch] = useReducer(counterReducer, initCount);
 
   const handleDown = () => {
-    countDispatch({ type: "DOWN", value: step });
+    countDispatch({ type: "DOWN", value: step.current });
   };
   const handleUp = () => {
-    countDispatch({ type: "UP", value: step });
+    countDispatch({ type: "UP", value: step.current });
   };
   const handleReset = (event) => {
-    countDispatch({ type: "RESET", value: step });
+    countDispatch({ type: "RESET", value: initCount });
+    // const stepElem = document.querySelector("#step");
+    stepElem.current.focus();
   };
 
-  useEffect(() => {
-    console.log("setup 함수 호출");
-    const timer = setInterval(() => {
-      console.log(step, new Date());
-    }, 1000);
-    return () => {
-      console.log(step, "cleanup 함수 호출");
-      clearInterval(timer);
-    };
-  }, [step]);
+  // useEffect(() => {
+  //   console.log("setup 함수 호출");
+  //   const timer = setInterval(() => {
+  //     console.log(step, new Date());
+  //   }, 1000);
+  //   return () => {
+  //     console.log(step, "cleanup 함수 호출");
+  //     clearInterval(timer);
+  //   };
+  // }, [step]);
 
   return (
     <div id="counter">
@@ -40,8 +44,9 @@ function Counter({ children = "0" }) {
         id="step"
         type="number"
         style={{ width: "40px" }}
-        value={step}
-        onChange={(e) => setStep(Number(e.target.value))}
+        defaultValue={step.current}
+        ref={stepElem}
+        onChange={(e) => (step.current = Number(e.target.value))}
       />
       <Button color="red" type="button" onClick={handleDown}>
         -
