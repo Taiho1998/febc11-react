@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { memo } from "react";
 // function Product({ name, price, mainImage, content }) {
-const Product = memo(function Product({ name, price, mainImage, content }) {
+const Product2 = memo(function Product2({
+  product: { name, price, mainImage, content },
+}) {
   console.log("product 렌더링");
   return (
     <>
@@ -18,11 +20,13 @@ const Product = memo(function Product({ name, price, mainImage, content }) {
   // }
 });
 
-Product.propTypes = {
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  mainImage: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+Product2.propTypes = {
+  product: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    mainImage: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
-export default Product;
+export default Product2;
