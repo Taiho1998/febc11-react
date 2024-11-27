@@ -3,6 +3,7 @@ import TodoListItem from "@pages/TodoListItem";
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import "../Pagination.css";
+import Pagination from "@components/Pagination";
 
 // const dummyData = {
 //   items: [{
@@ -24,7 +25,7 @@ function TodoList() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const params = {
-    keyword: searchParams.get("keyword"),
+    keyword: searchParams.get("keyword") || "",
     page: searchParams.get("page") || 1,
     limit: 5,
   };
@@ -74,22 +75,6 @@ function TodoList() {
     setSearchParams(new URLSearchParams(`keyword=${searchRef.current.value}`));
   };
 
-  const current = data?.pagination.page;
-
-  let pageList = [];
-  for (let page = 1; page <= data?.pagination.totalPages; page++) {
-    searchParams.set("page", page);
-    // keyword=환승&page=1
-    // keyword=환승&page=2
-    // keyword=환승&page=3
-    let search = searchParams.toString();
-    pageList.push(
-      <li key={page} className={current === page ? "active" : ""}>
-        <Link to={`/list?${search}`}>{page}</Link>
-      </li>
-    );
-  }
-
   return (
     <div id="main">
       <h2>할일 목록</h2>
@@ -108,11 +93,10 @@ function TodoList() {
         <ul className="todolist">{itemList}</ul>
       </div>
 
-      <div className="pagination">
-        <ul>{pageList}</ul>
-      </div>
-
-      <Outlet />
+      <Pagination
+        totalPages={data?.pagination.totalPages}
+        current={data?.pagination.page}
+      />
     </div>
   );
 }
