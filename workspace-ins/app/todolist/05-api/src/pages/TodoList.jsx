@@ -25,7 +25,7 @@ function TodoList() {
 
   const params = {
     keyword: searchParams.get("keyword"),
-    page: searchParams.get("page"),
+    page: searchParams.get("page") || 1,
     limit: 5,
   };
 
@@ -74,7 +74,7 @@ function TodoList() {
     setSearchParams(new URLSearchParams(`keyword=${searchRef.current.value}`));
   };
 
-  const current = params.page;
+  const current = data?.pagination.page;
 
   let pageList = [];
   for (let page = 1; page <= data?.pagination.totalPages; page++) {
