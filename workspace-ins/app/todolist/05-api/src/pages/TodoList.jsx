@@ -84,7 +84,7 @@ function TodoList() {
     // keyword=환승&page=3
     let search = searchParams.toString();
     pageList.push(
-      <li className={current === page ? "active" : ""}>
+      <li key={page} className={current === page ? "active" : ""}>
         <Link to={`/list?${search}`}>{page}</Link>
       </li>
     );
