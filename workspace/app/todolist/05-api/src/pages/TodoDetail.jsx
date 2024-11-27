@@ -1,7 +1,7 @@
 import useAxios from "@hooks/useAxios";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 
 // const dummyData = {
 //   item: {
@@ -17,6 +17,8 @@ import { Link, Outlet, useParams } from "react-router-dom";
 function TodoDetail() {
   const { _id } = useParams();
   console.log(_id);
+
+  const navigate = useNavigate();
 
   const [data, setData] = useState();
 
@@ -50,7 +52,9 @@ function TodoDetail() {
             <div>작성일 : {data.item.createdAt}</div>
             <div>수정일 : {data.item.updatedAt}</div>
             <Link to="./edit">수정</Link>
-            <Link to="/list">목록</Link>
+            <button type="button" onClick={() => navigate(-1)}>
+              목록
+            </button>
           </div>
 
           <Outlet context={{ item: data?.item, refetch: fetchDetail }} />

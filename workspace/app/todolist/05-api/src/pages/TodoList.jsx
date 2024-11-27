@@ -4,6 +4,7 @@ import TodoListItem from "@pages/TodoListItem";
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import "../Pagination.css";
+import Pagination from "@components/Pagination";
 
 // const dummyData = {
 //   items: [{
@@ -23,7 +24,7 @@ function TodoList() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const params = {
-    keyword: searchParams.get("keyword"),
+    keyword: searchParams.get("keyword") || "",
     page: searchParams.get("page") || 1,
     limit: 5,
   };
@@ -54,8 +55,7 @@ function TodoList() {
       alert("할일이 삭제 되었습니다.");
 
       // TODO: 목록을 다시 조회
-      const res = await axios.get("/todolist");
-      setData(res.data);
+      fetchList();
     } catch (err) {
       console.error(err);
       alert("할일 삭제에 실패했습니다.");
@@ -70,24 +70,6 @@ function TodoList() {
     e.preventDefault();
     setSearchParams(new URLSearchParams(`keyword=${searchRef.current.value}`));
   };
-  const current = params.page;
-  let pageList = [];
-
-  for (let page = 1; page < data?.pagination.totalPages; page++) {
-    searchParams.set("page", page);
-    let search = searchParams.toString();
-
-    pageList.push(
-      <li>
-        <Link
-          className={current === page ? "active" : ""}
-          to={`/list?${search}`}
-        >
-          {page}
-        </Link>
-      </li>
-    );
-  }
 
   return (
     <div id="main">
@@ -101,10 +83,10 @@ function TodoList() {
         </form>
         <ul className="todolist">{itemList}</ul>
       </div>
-      <div className="pagination">
-        {" "}
-        <ul>{pageList}</ul>
-      </div>
+      <Pagination
+        totalPages={data?.pagination.totalPages}
+        current={data?.pagination.page}
+      />
 
       <Outlet />
     </div>
