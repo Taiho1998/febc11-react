@@ -7,6 +7,12 @@ function App() {
   const [count, setCount] = useState(10);
 
   // Right3에 전달
+  const countDown = function(step){
+    setCount(count - step);
+  };
+  const reset = function(){
+    setCount(0);
+  };
   const countUp = function(step){
     setCount(count + step);
   };
@@ -22,7 +28,7 @@ function App() {
         <h1>App</h1>
         <div id="grid">
           <Left1 count={ count } />
-          <Right1 countUp={ countUp } />
+          <Right1 countDown={ countDown } reset={ reset } countUp={ countUp } />
         </div>
       </div>
     </>
