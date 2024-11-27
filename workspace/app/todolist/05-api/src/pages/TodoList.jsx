@@ -83,10 +83,12 @@ function TodoList() {
         </form>
         <ul className="todolist">{itemList}</ul>
       </div>
-      <Pagination
-        totalPages={data?.pagination.totalPages}
-        current={data?.pagination.page}
-      />
+      {data && (
+        <Pagination
+          totalPages={data.pagination.totalPages}
+          current={data.pagination.page}
+        />
+      )}
 
       <Outlet />
     </div>
