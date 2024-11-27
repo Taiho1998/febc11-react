@@ -8,7 +8,7 @@ Left3.propTypes = {
 function Left3({ count }) {
   useEffect(() => {
     console.log("      # Left3 렌더링.");
-  }, []);
+  });
   return (
     <div>
       <h3>Left3</h3>
