@@ -9,6 +9,12 @@ function App() {
   const countUp = function (step) {
     setCount(count + step);
   };
+  const reset = function () {
+    setCount(0);
+  };
+  const countDown = function (step) {
+    setCount(count - step);
+  };
 
   useEffect(() => {
     console.log("# App 렌더링.");
@@ -21,7 +27,7 @@ function App() {
         <h1>App</h1>
         <div id="grid">
           <Left1 count={count} />
-          <Right1 countUp={countUp} />
+          <Right1 countUp={countUp} reset={reset} countDown={countDown} />
         </div>
       </div>
     </>
