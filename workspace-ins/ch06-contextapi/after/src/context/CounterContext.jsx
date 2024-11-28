@@ -26,6 +26,7 @@ export function CounterProvider({ children }) {
   const values = {
     state: { count },
     actions: { countDown, reset, countUp },
+    hello: 'counter'
   };
 
   // 5. Context 객체의 Provider로 자식 컴포넌트를 감싸서 리턴

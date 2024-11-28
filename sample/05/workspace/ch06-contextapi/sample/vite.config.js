@@ -13,6 +13,8 @@ export default defineConfig({
       { find: "@context", replacement: "/src/context" },
       { find: "@redux", replacement: "/src/redux" },
       { find: "@redux-toolkit", replacement: "/src/redux-toolkit" },
+      { find: "@recoil", replacement: "/src/recoil" },
+      { find: "@zustand", replacement: "/src/zustand" },
     ],
   },
 })
