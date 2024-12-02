@@ -3,8 +3,8 @@ function sayHello(strings, ...values) {
   console.log(values);
   var msg = "";
   for (let i = 0; i < strings.length; i++) {
-    msg += strings[i];
-    values[i] ? (msg += "<strong>" + values[i] + "</strong>") : null;
+    const value = values[i] ? `<strong>${values[i]}</strong>` : "";
+    msg += strings[i] + value;
   }
   return msg;
 }
@@ -23,3 +23,14 @@ const result2 = sayHello(
   "하루"
 );
 console.log(result2);
+
+const userName = "무지";
+const weather = "맑음";
+const str = `안녕하세요 ${userName}님. 오늘 날씨는 ${weather}입니다.`;
+const result3 = sayHello(
+  ["안녕하세요. ", "님. 오늘 날씨는 ", " 입니다."],
+  userName,
+  weather
+);
+const result4 = sayHello`안녕하세요. ${userName} 님. 오늘 날씨는 ${weather} 입니다.`;
+console.log("result4", result4);
