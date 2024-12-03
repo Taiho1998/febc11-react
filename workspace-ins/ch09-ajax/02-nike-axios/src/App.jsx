@@ -2,21 +2,19 @@ import { useCallback, useEffect, useState } from "react";
 import Product from "./Product";
 import Shipping from "./Shipping";
 import { DotLoader } from 'react-spinners';
-import axios from 'axios';
+import useAxiosInstance from "@hooks/useAxiosInstance";
 
 function App() {
   const [data, setData] = useState(); // 1(마운트)
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const axios = useAxiosInstance();
+
   const fetchData = async (_id) => {
     setIsLoading(true);
     try{
-      const res = await axios(`https://11.fesp.shop/products/${_id}?delay=3000`, {
-        headers: {
-          'client-id': '00-nike'
-        }
-      });
+      const res = await axios(`/products/${_id}`);
       console.log('res', res);
       setData(res.data.item); // 4번(마운트 후)
       setError(null);
