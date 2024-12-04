@@ -5,32 +5,43 @@ import { DotLoader } from 'react-spinners';
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useQuery } from '@tanstack/react-query';
 
 function App() {
-  const [data, setData] = useState(); // 1(마운트)
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const axios = useAxiosInstance();
 
-  const fetchData = async (_id) => {
-    setIsLoading(true);
-    try{
-      // const res = await axios.get(`/products/${_id}`, { params: { delay: 1000 } });
-      const res = await axios.get(`/products/${_id}`);
-      setData(res.data.item); // 4번(마운트 후)
-      setError(null);
-    }catch(err){ // network 에러, 4xx, 5xx 응답일 경우
-      setError(err);
-      setData(null);
-    }finally{
-      setIsLoading(false);
-    }
-  };
+  // const [data, setData] = useState(); // 1(마운트)
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchData(7); // 3번(마운트 후)
-  }, []); // 마운트 된 이후에 최초 한번만 실행
+  // const fetchData = async (_id) => {
+  //   setIsLoading(true);
+  //   try{
+  //     // const res = await axios.get(`/products/${_id}`, { params: { delay: 1000 } });
+  //     const res = await axios.get(`/products/${_id}`);
+  //     setData(res.data.item); // 4번(마운트 후)
+  //     setError(null);
+  //   }catch(err){ // network 에러, 4xx, 5xx 응답일 경우
+  //     setError(err);
+  //     setData(null);
+  //   }finally{
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData(7); // 3번(마운트 후)
+  // }, []); // 마운트 된 이후에 최초 한번만 실행
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['상품상세조회번호는두번째요소에', 7], // 캐시에 사용할 키값을 지정(7번 상품)
+    queryFn: () => axios.get(`/products/7`), // 서버에 ajax 요청 코드(Promise 반환)
+    select: res => res.data.item,
+  });
+
+  console.log('isLoading', isLoading);
+  console.log('error', error);
+  console.log('data', data);
 
   const basicShippingFees = 3000;
 
@@ -51,9 +62,9 @@ function App() {
   // return <h1></h1> // 2번(마운트)
   return (
     <>
-      <h1>02 Nike 상품 상세 조회 - Axios</h1>
+      <h1>03 Nike 상품 상세 조회 - React Query</h1>
       { isLoading && <DotLoader /> }
-      {/* { error && <p>{ error.message }</p> } */}
+      { error && <p>{ error.message }</p> }
       { data && (
         <div>
           <Product product={ data } />
