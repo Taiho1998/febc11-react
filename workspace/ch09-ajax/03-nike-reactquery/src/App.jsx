@@ -3,9 +3,10 @@ import Product from "./Product";
 import { DotLoader } from "react-spinners";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useAxiosInstance from "@hooks/useAxiosInstance";
-import { ToastContainer } from "react-toastify";
-import { useQuery } from "@tanstack/react-query";
+import { Slide, toast, ToastContainer } from "react-toastify";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   console.log("App 렌더링");
@@ -38,11 +39,35 @@ function App() {
   //   fetchData(5);
   // }, []);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["products", 7],
     queryFn: () => axios.get(`/products/7`),
     select: (res) => res.data.item,
   });
+
+  const orderProduct = useMutation({
+    mutationFn: (products) => axios.post(`/orders`, products),
+    onSuccess: () => {
+      toast.success("주문이 완료되었습니다");
+      refetch();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+      console.error(err);
+    },
+  });
+
+  // const { data, isLoading, error } = useQuery({
+  //   queryFn: () =>
+  //     axios.post(`/orders`, {
+  //       products: [
+  //         {
+  //           _id: 7,
+  //           quentity,
+  //         },
+  //       ],
+  //     }),
+  // });
 
   console.log("isLoading", isLoading);
   console.log("error", error);
@@ -60,9 +85,14 @@ function App() {
   };
 
   const handlePayment = useCallback(() => {
-    alert(
+    const ok = confirm(
       `배송비 ${shippingFees.toLocaleString()}원이 추가됩니다. 상품을 결제하시겠습니까?`
     );
+    if (ok) {
+      orderProduct.mutate({
+        products: [{ _id: 7, quantity }],
+      });
+    }
   }, [shippingFees]);
 
   return (
@@ -77,6 +107,8 @@ function App() {
           <h2>수량 선택</h2>
           <div>
             가격: {data.price.toLocaleString()}원
+            <br />
+            남은 수량: {data.quantity - data.buyQuantity}
             <br />
             수량:{" "}
             <input
@@ -97,6 +129,19 @@ function App() {
           <Shipping fees={shippingFees} handlePayment={handlePayment} />
         </div>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Slide}
+      />
     </>
   );
 }

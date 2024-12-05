@@ -1,26 +1,13 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
-import useFetch from "@hooks/useFetch";
 import TodoListItem from "@pages/TodoListItem";
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import "../Pagination.css";
 import Pagination from "@components/Pagination";
-import { useQuery } from "@tanstack/react-query";
-
-// const dummyData = {
-//   items: [{
-//     _id: 1,
-//     title: '잠자기',
-//   }, {
-//     _id: 2,
-//     title: '자바스크립트 복습',
-//     done: true,
-//   }]
-// };
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 function TodoList() {
-  const [data, setData] = useState();
-  const searchRef = useRef();
+  const searchRef = useRef("");
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -39,32 +26,59 @@ function TodoList() {
   // axios 인스턴스
   const axios = useAxiosInstance();
 
-  const fetchList = async () => {
-    const res = await axios.get("/todolist", { params });
-    setData(res.data);
-  };
+  // const [data, setData] = useState();
+  // const fetchList = async () => {
+  //   const res = await axios.get("/todolist", { params });
+  //   setData(res.data);
+  // };
 
-  useEffect(() => {
-    fetchList();
-  }, [searchParams]);
+  // useEffect(() => {
+  //   fetchList();
+  // }, [searchParams]);
+
+  const { data, refetch } = useQuery({
+    queryKey: ["todolist", params],
+    queryFn: () => axios.get("/todolist", { params }),
+    select: (res) => res.data,
+    staleTime: 1000 * 60,
+    gcTime: 1000 * 60 * 5,
+  });
 
   // 삭제 작업
-  const handleDelete = async (_id) => {
-    try {
-      // TODO: API 서버에 삭제 요청
-      await axios.delete(`/todolist/${_id}`);
-      alert("할일이 삭제 되었습니다.");
+  // const handleDelete = async (_id) => {
+  //   try {
+  //     // TODO: API 서버에 삭제 요청
+  //     await axios.delete(`/todolist/${_id}`);
+  //     alert("할일이 삭제 되었습니다.");
 
-      // TODO: 목록을 다시 조회
-      fetchList();
-    } catch (err) {
+  //     // TODO: 목록을 다시 조회
+  //     refetch();
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("할일 삭제에 실패했습니다.");
+  //   }
+  // };
+
+  const deleteItem = useMutation({
+    mutationFn: (_id) => {
+      axios.delete(`/todolist/${_id}`);
+    },
+    onSuccess: () => {
+      alert("할 일이 삭제되었습니다.");
+      refetch();
+    },
+    onError: (err) => {
       console.error(err);
-      alert("할일 삭제에 실패했습니다.");
-    }
-  };
+      alert("할일 삭제에 실패했습니다");
+    },
+  });
 
   const itemList = data?.items.map((item) => (
-    <TodoListItem key={item._id} item={item} handleDelete={handleDelete} />
+    <TodoListItem
+      key={item._id}
+      item={item}
+      handleDelete={() => deleteItem.mutate(item._id)}
+    />
   ));
 
   const handleSearch = (e) => {
@@ -79,7 +93,12 @@ function TodoList() {
         <Link to="/list/add">추가</Link>
         <br />
         <form className="search" onSubmit={handleSearch}>
-          <input type="text" autoFocus defaultValue="hello" ref={searchRef} />
+          <input
+            type="text"
+            autoFocus
+            defaultValue={params.keyword}
+            ref={searchRef}
+          />
           <button type="submit">검색</button>
         </form>
         <ul className="todolist">{itemList}</ul>
@@ -90,8 +109,6 @@ function TodoList() {
           current={data.pagination.page}
         />
       )}
-
-      <Outlet />
     </div>
   );
 }
