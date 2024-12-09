@@ -15,14 +15,14 @@ function TodoAdd() {
   const axios = useAxiosInstance();
   const navigate = useNavigate();
 
-  const quertClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const addItem = useMutation({
     mutationFn: (item) => axios.post("/todolist", item),
     onSuccess: () => {
       alert("할일이 추가되었습니다.");
       //지정된 키의 캐시 데이터 무효화
-      quertClient.invalidateQueries(["todolist"]);
+      queryClient.invalidateQueries(["todolist"]);
       navigate(-1);
     },
     onError: (err) => {

@@ -47,7 +47,7 @@ function TodoDetail() {
             </button>
           </div>
 
-          <Outlet context={{ item: data?.item, refetch }} />
+          <Outlet context={{ item: data.item }} />
         </>
       )}
     </div>
