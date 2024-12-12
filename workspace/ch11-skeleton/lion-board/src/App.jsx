@@ -1,5 +1,6 @@
 import router from "@/routes";
 import useThemeStore from "@zustand/themeStore";
+import { HelmetProvider } from "react-helmet-async";
 import { RouterProvider } from "react-router-dom";
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
     document.documentElement.classList.remove("dark");
   }
   return (
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <HelmetProvider>
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    </HelmetProvider>
   );
 }
 
