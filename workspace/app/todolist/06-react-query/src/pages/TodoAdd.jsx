@@ -22,7 +22,7 @@ function TodoAdd() {
     onSuccess: () => {
       alert("할일이 추가되었습니다.");
       //지정된 키의 캐시 데이터 무효화
-      queryClient.invalidateQueries(["todolist"]);
+      queryClient.invalidateQueries({ queryKey: ["todolist"] });
       navigate(-1);
     },
     onError: (err) => {
