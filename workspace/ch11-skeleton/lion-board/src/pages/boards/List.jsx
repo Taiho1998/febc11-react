@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import useUserStore from "@zustand/userStore";
 import { Helmet } from "react-helmet-async";
+import Spinner from "@components/Spinner";
+import { Suspense } from "react";
 
 export default function List() {
   const axios = useAxiosInstance();
@@ -22,7 +24,7 @@ export default function List() {
   console.log(type);
 
   if (!data) {
-    return <div>로딩중...</div>;
+    return <Spinner.WithHeader />;
   }
 
   const list = data.item.map((item) => <ListItem key={item._id} item={item} />);

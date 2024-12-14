@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useUserStore from "@zustand/userStore";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import Spinner from "@components/Spinner";
 
 export default function Detail() {
   const { user } = useUserStore();
@@ -35,7 +36,7 @@ export default function Detail() {
   };
 
   if (!data) {
-    return <div>로딩중...</div>;
+    return <Spinner.TargetArea />;
   }
 
   return (
