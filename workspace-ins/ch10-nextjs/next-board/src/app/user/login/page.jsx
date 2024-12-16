@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Page() {
   return (
     <>
@@ -29,11 +31,11 @@ export default function Page() {
                 name="password"
               />
               <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">비밀번호는 필수입니다.</p>
-              <a href="#" className="block mt-6 ml-auto text-gray-500 text-sm dark:text-gray-300 hover:underline">비밀번호를 잊으셨나요?</a>
+              <Link href="#" className="block mt-6 ml-auto text-gray-500 text-sm dark:text-gray-300 hover:underline">비밀번호를 잊으셨나요?</Link>
             </div>
             <div className="mt-10 flex justify-center items-center">
               <button type="submit" className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded">로그인</button>
-              <a href="/user/signup" className="ml-8 text-gray-800 hover:underline">회원가입</a>
+              <Link href="/user/signup" className="ml-8 text-gray-800 hover:underline">회원가입</Link>
             </div>
           </form>
         </div>
