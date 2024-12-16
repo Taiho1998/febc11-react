@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 async function fetchPost(_id) {
+  console.log(_id, "상세 조회");
   const url = `https://11.fesp.shop/posts/${_id}`;
   const res = await fetch(url, {
     headers: { "client-id": "00-board" },
@@ -8,9 +9,19 @@ async function fetchPost(_id) {
   return await res.json();
 }
 
+export async function generateMetadata({ params }) {
+  const { _id } = await params;
+  const data = await fetchPost(_id);
+  return {
+    title: `${data.item.title}`,
+    description: `${data.item.content}`,
+  };
+}
+
 export default async function Page({ params }) {
   const { _id } = await params;
   const data = await fetchPost(_id);
+
   return (
     <>
       <main className="container mx-auto mt-4 px-4">
